@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+}
+
+.todoList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.todoItem {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 12px;
+    background-color: light-dark(#ebebeb,#030303);
+    border-radius: 10px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.add {
+    fill: light-dark(#000,#FFF);
+}
+
+.done {
+    text-decoration: line-through;
+}

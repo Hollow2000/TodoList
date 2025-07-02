@@ -2,7 +2,7 @@ import Dexie, { Table } from 'dexie';
 
 export interface TodoList {
     id?: number;
-    title: string
+    title: string;
 }
 
 export interface TodoItem {

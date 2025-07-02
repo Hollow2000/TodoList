@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TodoService } from './todo.service';
+import { TodoListWithItems, TodoService } from './todo.service';
 import { TodoItem, TodoList } from './db';
 
 @Component({
@@ -13,23 +13,17 @@ export class AppComponent implements OnInit {
   private readonly _todoService = inject(TodoService);
 
   title = 'prueba-dexie';
-  todoLists = signal<TodoList[]>([]);
-  private todoItems = signal<TodoItem[]>([]);
+  todoList$ = signal<TodoListWithItems[]>([]);
 
-  getItemsByList(listId: number): TodoItem[] {
-    return this.todoItems().filter((item) => item.todoListId === listId);
-  }
-
-  async ngOnInit(): Promise<void> {
-    this.todoLists.set(await this._todoService.getTodoLists());
-    this.todoItems.set(await this._todoService.getTodoItems());
+  ngOnInit(): void {
+    this._todoService.getTodoListWithItems().subscribe((list) => this.todoList$.set(list));
   }
 
   async markItem(id: number, done: boolean) {
     const res = await this._todoService.markTodoItem(id,done);
-    if (res) {
-      this.todoItems.set(await this._todoService.getTodoItems());
-    }
+    // if (res) {
+    //   this.todoItems.set(await this._todoService.getTodoItems());
+    // }
   }
 
   toggleNew(elemet: HTMLElement, enable: boolean){
@@ -60,7 +54,7 @@ export class AppComponent implements OnInit {
       });
       if (res) {
         this.toggleNew(elemet, false);
-        this.todoItems.set(await this._todoService.getTodoItems());
+        // this.todoItems.set(await this._todoService.getTodoItems());
       }
     }
   }
@@ -71,13 +65,13 @@ export class AppComponent implements OnInit {
       const res = await this._todoService.updateTodoItem(todoId,{title});
       if (res) {
         this.toggleEdit(elemet, false);
-        this.todoItems.set(await this._todoService.getTodoItems());
+        // this.todoItems.set(await this._todoService.getTodoItems());
       }
     }
   }
 
   async deleteItem(todoId: number) {
     await this._todoService.deleteTodoItem(todoId);
-    this.todoItems.set(await this._todoService.getTodoItems());
+    // this.todoItems.set(await this._todoService.getTodoItems());
   }
 }

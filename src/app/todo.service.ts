@@ -1,16 +1,30 @@
 import { Injectable } from '@angular/core';
-import { db, TodoItem, TodoList } from './db';
+import { db, TodoItem } from './db';
+import { liveQuery, Observable } from 'dexie';
+
+export interface TodoListWithItems {
+  id?: number;
+  title: string;
+  items: TodoItem[]
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  // LIST METHODS
-  async getTodoLists(): Promise<TodoList[]> {
-    return db.todoLists.toArray();
+  getTodoListWithItems():Observable<TodoListWithItems[]> {
+    return liveQuery(async () => {
+      const lists = await db.todoLists.toArray();
+      const result = await Promise.all(
+        lists.map(async list => {
+          const items = await db.todoItems.where('todoListId').equals(list.id!).toArray();
+          return { ...list, items };
+        })
+      );
+      return result;
+    });
   }
 
-  // ITEMS METHODS
   async addTodoItem(item: TodoItem): Promise<number> {
     return db.todoItems.add(item);
   }
@@ -23,12 +37,12 @@ export class TodoService {
     }
   }
 
-  async updateTodoItem(id: number, updates: Partial<TodoItem> ): Promise<number> {
+  async updateTodoItem(id: number, updates: Partial<TodoItem>): Promise<number> {
     return db.todoItems.update(id, updates);
   }
 
   async markTodoItem(id: number, done: boolean) {
-    return db.todoItems.update(id,{done});
+    return db.todoItems.update(id, { done });
   }
 
   async deleteTodoItem(id: number) {

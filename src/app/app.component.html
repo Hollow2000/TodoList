@@ -1,7 +1,7 @@
-@for (list of todoLists(); track $index) {
+@for (list of todoList$(); track $index) {
 <h1>{{list.title}}</h1>
 <div class="todoList">
-  @for (item of getItemsByList(list.id!); track $index) {
+  @for (item of list.items; track $index) {
   <div class="todoItem">
     <div style="display: flex; gap: 10px;">
       <input #done type="checkbox" [name]="item.title" [id]="item.id" [checked]="item.done"

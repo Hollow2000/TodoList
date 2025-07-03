@@ -22,34 +22,6 @@ export class AppDB extends Dexie {
             todoLists: '++id',
             todoItems: '++id, todoListId'
         });
-        this.on('populate', () => this.populate());
-    }
-
-    async populate() {
-        const todoListId = await this.todoLists.add({
-            title: 'Pruebas a realizar'
-        });
-        const todoListId2 = await this.todoLists.add({
-            title: 'Segunda lista'
-        });
-        await this.todoItems.bulkAdd([
-            {
-                todoListId,
-                title: 'Marcar esta tarea como lista'
-            },
-            {
-                todoListId,
-                title: 'Eliminar esta tarea'
-            },
-            {
-                todoListId,
-                title: 'Crear nueva tarea'
-            },
-            {
-                todoListId,
-                title: 'Crear nueva lista de tareas'
-            }
-        ]);
     }
 }
 

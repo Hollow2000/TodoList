@@ -25,6 +25,10 @@ export class TodoService {
     });
   }
 
+  async addTodoList(title: string) {
+    return db.todoLists.add({title});
+  }
+
   async addTodoItem(item: TodoItem): Promise<number> {
     return db.todoItems.add(item);
   }

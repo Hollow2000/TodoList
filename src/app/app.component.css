@@ -1,15 +1,37 @@
 :host {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
     height: 100dvh;
+    overflow: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge */
+    scroll-behavior: smooth; /* opcional: para desplazamiento suave */
+    -webkit-overflow-scrolling: touch; /* mejora en iOS */
+}
+
+.contentList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-snap-align: start;
+}
+
+:host::-webkit-scrollbar {
+    display: none;
+  }
+.contentList::-webkit-scrollbar {
+  display: none;
 }
 
 .todoList {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: auto;
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge */
+    max-width: 80%;
 }
 
 .todoItem {
@@ -33,4 +55,61 @@
 
 .done {
     text-decoration: line-through;
+}
+
+.addList {
+    margin: 2rem;
+    height: 100%;
+    width: 80%;
+    border-radius: 20px;
+    background-color: light-dark(#ebebeb,#030303);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.arrow-left {
+    position: absolute;
+    left: 0px;
+    display: flex;
+    align-items: center;
+    height: 100dvh;
+    margin: 0 10px;
+}
+.arrow-right {
+    position: absolute;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    height: 100dvh;
+    margin: 0 10px;
+}
+
+h1 {
+    text-align: center;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+h3 {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+@media (min-width: 768px) {
+  .contentList{
+    min-width: 380px;
+    max-width: 400px;
+  }
+  :host {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .contentList{
+    min-width: 100%;
+  }
 }

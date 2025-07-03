@@ -1,7 +1,6 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TodoListWithItems, TodoService } from './todo.service';
-import { TodoItem, TodoList } from './db';
 
 @Component({
   selector: 'app-root',
@@ -10,23 +9,41 @@ import { TodoItem, TodoList } from './db';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
+  // #region Configuracion inical
   private readonly _todoService = inject(TodoService);
 
-  title = 'prueba-dexie';
   todoList$ = signal<TodoListWithItems[]>([]);
 
+  private scrollInterval: any;
+  showAddPage = false;
+  showPrev = false;
+  showNext = false;
+
+  constructor(private elRef: ElementRef<HTMLElement>) { }
+
   ngOnInit(): void {
-    this._todoService.getTodoListWithItems().subscribe((list) => this.todoList$.set(list));
+    this._todoService.getTodoListWithItems().subscribe((list) => {
+      this.todoList$.set(list);
+      this.showAddPage = true;
+      setTimeout(() => {
+        this.updateArrows();
+      }, 500);
+    });
   }
 
+  // Detectar scroll en el host
+  @HostListener('scroll')
+  onScroll() {
+    this.updateArrows();
+  }
+  // #endregion
+
+  //#region Metodos Items
   async markItem(id: number, done: boolean) {
-    const res = await this._todoService.markTodoItem(id,done);
-    // if (res) {
-    //   this.todoItems.set(await this._todoService.getTodoItems());
-    // }
+    await this._todoService.markTodoItem(id, done);
   }
 
-  toggleNew(elemet: HTMLElement, enable: boolean){
+  toggleNew(elemet: HTMLElement, enable: boolean) {
     elemet.contentEditable = String(enable);
     if (enable) {
       elemet.innerText = '';
@@ -36,7 +53,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  toggleEdit(elemet: HTMLElement, enable: boolean, title?: string){
+  toggleEdit(elemet: HTMLElement, enable: boolean, title?: string) {
     elemet.contentEditable = String(enable);
     if (enable) {
       elemet.innerText = '';
@@ -46,7 +63,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  async addItem(elemet: HTMLElement,listId: number) {
+  async addItem(elemet: HTMLElement, listId: number) {
     if (elemet.textContent && elemet.textContent !== '') {
       const res = await this._todoService.addTodoItem({
         title: elemet.textContent,
@@ -54,24 +71,81 @@ export class AppComponent implements OnInit {
       });
       if (res) {
         this.toggleNew(elemet, false);
-        // this.todoItems.set(await this._todoService.getTodoItems());
       }
     }
   }
 
   async editItem(todoId: number, elemet: HTMLElement) {
     const title = elemet.textContent!;
-    if(title && title !== '') {
-      const res = await this._todoService.updateTodoItem(todoId,{title});
+    if (title && title !== '') {
+      const res = await this._todoService.updateTodoItem(todoId, { title });
       if (res) {
         this.toggleEdit(elemet, false);
-        // this.todoItems.set(await this._todoService.getTodoItems());
       }
     }
   }
 
   async deleteItem(todoId: number) {
     await this._todoService.deleteTodoItem(todoId);
-    // this.todoItems.set(await this._todoService.getTodoItems());
   }
+  //#endregion
+
+  //#region Metodos Lists
+  async toggleList(elemet: HTMLElement, enable: boolean) {
+    elemet.contentEditable = String(enable);
+    if (enable) {
+      elemet.innerText = '';
+      elemet.focus();
+    } else {
+      elemet.innerText = 'Agregar lista';
+    }
+  }
+
+  async addList(elemet: HTMLElement) {
+    if (elemet.textContent && elemet.textContent !== '') {
+      await this._todoService.addTodoList(elemet.textContent)
+      this.toggleList(elemet, false);
+    }
+  }
+  //#endregion
+
+  //#region Scroll Methods
+  scroll(direction: 'left' | 'right') {
+    clearInterval(this.scrollInterval);
+    const container = this.elRef.nativeElement;
+    const speed = 10;
+    const step = direction === 'right' ? speed : -speed;
+    container.scrollBy({ left: step });
+  }
+
+  startScrolling(direction: 'left' | 'right') {
+    const container = this.elRef.nativeElement;
+    const speed = 10;
+    const delay = 16;
+
+    this.scrollInterval = setInterval(() => {
+      const step = direction === 'right' ? speed : -speed;
+      container.scrollBy({ left: step });
+      if ((direction === 'left' && !this.showPrev) ||
+      (direction === 'right' && !this.showNext)) {
+        this.stopScrolling();
+      }
+    }, delay);
+  }
+
+  stopScrolling() {
+    clearInterval(this.scrollInterval);
+  }
+
+  private updateArrows() {
+    const el = this.elRef.nativeElement;
+    const scrollLeft = el.scrollLeft;
+    const maxScrollLeft = el.scrollWidth - el.clientWidth;
+
+    const hasOverflow = el.scrollWidth > el.clientWidth;
+
+    this.showPrev = hasOverflow && scrollLeft > 5;       // mostrar si no estamos al inicio
+    this.showNext = hasOverflow && scrollLeft < maxScrollLeft - 5; // mostrar si no estamos al final
+  }
+  //#endregion
 }

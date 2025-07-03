@@ -29,6 +29,9 @@ export class AppDB extends Dexie {
         const todoListId = await this.todoLists.add({
             title: 'Pruebas a realizar'
         });
+        const todoListId2 = await this.todoLists.add({
+            title: 'Segunda lista'
+        });
         await this.todoItems.bulkAdd([
             {
                 todoListId,

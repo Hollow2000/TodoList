@@ -76,6 +76,7 @@ export class AppComponent implements OnInit {
   }
 
   async editItem(todoId: number, elemet: HTMLElement) {
+
     const title = elemet.textContent!;
     if (title && title !== '') {
       const res = await this._todoService.updateTodoItem(todoId, { title });
@@ -134,7 +135,7 @@ export class AppComponent implements OnInit {
       const step = direction === 'right' ? speed : -speed;
       container.scrollBy({ left: step });
       if ((direction === 'left' && !this.showPrev) ||
-      (direction === 'right' && !this.showNext)) {
+        (direction === 'right' && !this.showNext)) {
         this.stopScrolling();
       }
     }, delay);

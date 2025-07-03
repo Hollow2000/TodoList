@@ -3,7 +3,8 @@
   <div class="header">
     <h1 class="titleList">{{list.title}}</h1>
     <!-- DELETE -->
-    <svg (click)="deleteList(list.id!)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
+    <svg class="clickable" (click)="deleteList(list.id!)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
+      height="20" viewBox="0,0,256,256">
       <g fill="#e63838" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
         stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
         font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -13,22 +14,41 @@
           </path>
         </g>
       </g>
-        </svg>
+    </svg>
   </div>
   <div class="todoList">
     @for (item of list.items; track $index) {
     <div class="todoItem">
-      <div style="display: flex; gap: 10px;">
-        <input #done type="checkbox" [name]="item.title" [id]="item.id" [checked]="item.done"
-          (change)="markItem(item.id!,done.checked)">
-        <h3 #editTitle [class.done]="item.done" (keydown.enter)="editItem(item.id!,editTitle)"
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <div class="checkbox-wrapper-12">
+          <div class="cbx">
+            <input id="cbx-12" #done type="checkbox" [name]="item.title" [id]="item.id" [checked]="item.done"
+              (change)="markItem(item.id!,done.checked)" />
+            <label for="cbx-12"></label>
+            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
+              <path d="M2 8.36364L6.23077 12L13 2"></path>
+            </svg>
+          </div>
+          <!-- Gooey-->
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <defs>
+              <filter id="goo-12">
+                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
+                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+                  result="goo-12"></fecolormatrix>
+                <feblend in="SourceGraphic" in2="goo-12"></feblend>
+              </filter>
+            </defs>
+          </svg>
+        </div>
+        <h3 #editTitle [class.done]="item.done" (keydown.enter)="$event.preventDefault(); editItem(item.id!,editTitle);"
           (keydown.esc)="toggleEdit(editTitle, false, item.title)">{{item.title}}</h3>
       </div>
       @if (editTitle.contentEditable === 'true') {
       <div class="actions">
         <!-- CANCELAR -->
-        <svg (click)="toggleEdit(editTitle, false, item.title)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-          width="20" height="20" viewBox="0,0,256,256">
+        <svg class="clickable" (click)="toggleEdit(editTitle, false, item.title)" xmlns="http://www.w3.org/2000/svg"
+          x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
           <g fill="#e63838" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
             font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -40,8 +60,8 @@
           </g>
         </svg>
         <!-- OK -->
-        <svg (click)="editItem(item.id!,editTitle)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
-          height="20" viewBox="0,0,256,256">
+        <svg class="clickable" (click)="editItem(item.id!,editTitle)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+          width="20" height="20" viewBox="0,0,256,256">
           <g fill="#05b322" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
             font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -56,8 +76,8 @@
       } @else {
       <div class="actions">
         <!-- EDIT -->
-        <svg (click)="toggleEdit(editTitle, true)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
-          height="20" viewBox="0,0,256,256">
+        <svg class="clickable" (click)="toggleEdit(editTitle, true)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+          width="20" height="20" viewBox="0,0,256,256">
           <g fill="#1449c2" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
             font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -69,8 +89,8 @@
           </g>
         </svg>
         <!-- DELETE -->
-        <svg (click)="deleteItem(item.id!)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
-          viewBox="0,0,256,256">
+        <svg class="clickable" (click)="deleteItem(item.id!)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+          width="20" height="20" viewBox="0,0,256,256">
           <g fill="#e63838" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
             font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -86,14 +106,15 @@
     </div>
     }
     <div class="todoItem">
-      <h3 #newItem (keydown.enter)="addItem(newItem, list.id!)" (keydown.esc)="toggleNew(newItem, false)">
+      <h3 #newItem (keydown.enter)="$event.preventDefault(); addItem(newItem, list.id!);"
+        (keydown.esc)="toggleNew(newItem, false)">
         Agregar nueva tarea
       </h3>
       @if (newItem.contentEditable === 'true') {
       <div class="actions">
         <!-- CANCELAR -->
-        <svg (click)="toggleNew(newItem,false)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
-          height="20" viewBox="0,0,256,256">
+        <svg class="clickable" (click)="toggleNew(newItem,false)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+          width="20" height="20" viewBox="0,0,256,256">
           <g fill="#e63838" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
             font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -105,8 +126,8 @@
           </g>
         </svg>
         <!-- OK -->
-        <svg (click)="addItem(newItem,list.id!)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20"
-          height="20" viewBox="0,0,256,256">
+        <svg class="clickable" (click)="addItem(newItem,list.id!)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+          width="20" height="20" viewBox="0,0,256,256">
           <g fill="#05b322" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
             font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -120,7 +141,7 @@
       </div>
       } @else {
       <!-- AGREGAR -->
-      <div class="actions" (click)="toggleNew(newItem, true)">
+      <div class="actions clickable" (click)="toggleNew(newItem, true)">
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256">
           <g class="add" fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
             stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
@@ -141,12 +162,13 @@
 @if (showAddPage) {
 <div class="contentList">
   <div class="addList">
-    <h1 #newList>Agregar lista</h1>
+    <h1 #newList (keydown.enter)="$event.preventDefault(); addList(newList);" (keydown.esc)="toggleList(newList,false)">
+      Agregar lista</h1>
     @if (newList.contentEditable === 'true') {
     <div class="actions">
       <!-- CANCELAR -->
-      <svg (click)="toggleList(newList,false)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50"
-        viewBox="0,0,256,256">
+      <svg class="clickable" (click)="toggleList(newList,false)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+        width="50" height="50" viewBox="0,0,256,256">
         <g fill="#e63838" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
           stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
           font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -158,8 +180,8 @@
         </g>
       </svg>
       <!-- OK -->
-      <svg (click)="addList(newList)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50"
-        viewBox="0,0,256,256">
+      <svg class="clickable" (click)="addList(newList)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50"
+        height="50" viewBox="0,0,256,256">
         <g fill="#05b322" fill-rule="nonzero" stsroke="none" stroke-width="1" stroke-linecap="butt"
           stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
           font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -174,8 +196,8 @@
     } @else {
     <div class="actions">
       <!-- ADD -->
-      <svg (click)="toggleList(newList,true)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50"
-        viewBox="0,0,256,256">
+      <svg class="clickable" (click)="toggleList(newList,true)" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+        width="50" height="50" viewBox="0,0,256,256">
         <g class="add" fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
           stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
           font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -192,9 +214,7 @@
 </div>
 }
 @if (showPrev) {
-<div class="arrow-left" 
-  (click)="scroll('left')" 
-  (mouseenter)="startScrolling('left')" 
+<div class="arrow-left clickable" (click)="scroll('left')" (mouseenter)="startScrolling('left')"
   (mouseleave)="stopScrolling()">
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor"
     stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -203,9 +223,7 @@
 </div>
 }
 @if (showNext) {
-<div class="arrow-right" 
-  (click)="scroll('right')" 
-  (mouseenter)="startScrolling('right')"
+<div class="arrow-right clickable" (click)="scroll('right')" (mouseenter)="startScrolling('right')"
   (mouseleave)="stopScrolling()">
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor"
     stroke-width="3" stroke-linecap="round" stroke-linejoin="round">

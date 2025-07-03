@@ -74,8 +74,6 @@
   /* Opcional: evita selección accidental de texto */
 }
 
-.clickable:focus {}
-
 .addList {
   margin: 2rem;
   height: 100%;

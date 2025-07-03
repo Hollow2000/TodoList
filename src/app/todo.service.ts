@@ -18,6 +18,7 @@ export class TodoService {
       const result = await Promise.all(
         lists.map(async list => {
           const items = await db.todoItems.where('todoListId').equals(list.id!).toArray();
+          items.sort((a, b) => (a.done === b.done) ? 0 : a.done ? 1 : -1);
           return { ...list, items };
         })
       );
@@ -34,7 +35,7 @@ export class TodoService {
   }
 
   async addTodoItem(item: TodoItem): Promise<number> {
-    return db.todoItems.add(item);
+    return db.todoItems.add({...item, done: false});
   }
 
   async getTodoItems(listId?: number): Promise<TodoItem[]> {

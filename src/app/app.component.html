@@ -1,4 +1,4 @@
-@for (list of todoList$(); track $index) {
+@for (list of todoList$(); track list.id) {
 <div class="contentList">
   <div class="header">
     <h1 class="titleList">{{list.title}}</h1>
@@ -17,7 +17,7 @@
     </svg>
   </div>
   <div class="todoList">
-    @for (item of list.items; track $index) {
+    @for (item of list.items; track item.id) {
     <div class="todoItem">
       <div style="display: flex; gap: 10px; align-items: center;">
         <div class="checkbox-wrapper-12">

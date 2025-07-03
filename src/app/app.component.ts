@@ -105,7 +105,14 @@ export class AppComponent implements OnInit {
     if (elemet.textContent && elemet.textContent !== '') {
       await this._todoService.addTodoList(elemet.textContent)
       this.toggleList(elemet, false);
+      setTimeout(() => {
+        this.scroll('left');
+      }, 100);
     }
+  }
+
+  async deleteList(listId: number) {
+    this._todoService.deleteList(listId);
   }
   //#endregion
 

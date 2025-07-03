@@ -31,7 +31,7 @@
     overflow: auto;
     scrollbar-width: none;        /* Firefox */
     -ms-overflow-style: none;     /* IE/Edge */
-    max-width: 80%;
+    width: 80%;
 }
 
 .todoItem {
@@ -84,6 +84,18 @@
     align-items: center;
     height: 100dvh;
     margin: 0 10px;
+}
+
+.header {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 1rem;
+   width: 80%;
+}
+
+.titleList {
+  flex: 0.9;
 }
 
 h1 {
